@@ -1,0 +1,173 @@
+using System;
+
+namespace blackjack
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int money = 1000, betmoney, card = 0, sumOfCards2 = 0, numAces = 0, numOfCards = 0, win = 0, sumOfCards = 0, Ace = 0;
+            string picture = " ", answer = "y";
+            Random rnd = new Random();
+
+            //rounds
+            for (int i = 1; i < 11; i++)
+            {
+                //start
+                Console.WriteLine("You have {0} monkey-money, how much do you want to bet? ", money);
+                betmoney = int.Parse(Console.ReadLine());
+                money -= betmoney;
+
+                //human
+                while (answer == "y" && sumOfCards < 21)
+                {
+                    card = rnd.Next(1, 13);
+                    numOfCards++;
+
+                    if (card > 10 || card == 1)
+                    {
+                        if (card == 11)
+                        {
+                            picture = "Jack";
+                            card = 10;
+                        }
+                        if (card == 12)
+                        {
+                            picture = "Queen";
+                            card = 10;
+                        }
+                        if (card == 13)
+                        {
+                            picture = "King";
+                            card = 10;
+                        }
+                        if (card == 1)
+                        {
+                            picture = "Ace";
+                            while ((Ace != 1) && (Ace != 11))
+                            {
+                                Console.WriteLine("you got an Ace, do you want it to be 11 or 1?");
+                                Ace = int.Parse(Console.ReadLine());
+                            }
+                            card = Ace;
+                        }
+
+                        if (picture != "Ace")
+                            Console.WriteLine("You got {0} ", picture);
+                    }
+                    else
+                    {
+                        Console.WriteLine("You got {0}", card);
+                    }
+
+                    sumOfCards += card;
+                    if (numOfCards > 1)
+                    {
+                        Console.WriteLine("your sum of cards is {0}, Do you want another card? y/n", sumOfCards);
+                        answer = Console.ReadLine();
+                    }
+                }
+
+                //computer
+                while (sumOfCards2 < 17)
+                {
+                    card = rnd.Next(1, 13);
+
+                    if (card > 10 || card == 1)
+                    {
+                        if (card == 11)
+                        {
+                            picture = "Jack";
+                            card = 10;
+                        }
+                        if (card == 12)
+                        {
+                            picture = "Queen";
+                            card = 10;
+                        }
+                        if (card == 13)
+                        {
+                            picture = "King";
+                            card = 10;
+                        }
+                        if (card == 1)
+                        {
+                            picture = "Ace";
+                            card = 11;
+                            numAces++;
+                        }
+                        Console.WriteLine("The dealer got {0}", picture);
+                    }
+                    else
+                    {
+                        Console.WriteLine("The dealer got {0}", card);
+                    }
+
+                    sumOfCards2 += card;
+                    if ((numAces > 0) && (sumOfCards2 > 21))
+                    {
+                        Console.WriteLine("changing dealer's Ace from 11 to 1");
+                        sumOfCards2 -= 10;
+                        numAces--;
+                    }
+                }
+
+                //techni end
+                if ((sumOfCards > 21) && (sumOfCards2 > 21))
+                    win = 2;
+                else if (sumOfCards > 21)
+                    win = 0;
+                else if (sumOfCards2 > 21)
+                    win = 1;
+                else if (sumOfCards < sumOfCards2)
+                    win = 0;
+                else if (sumOfCards2 < sumOfCards)
+                    win = 1;
+                else if (sumOfCards2 == sumOfCards)
+                    win = 2;
+
+                if (win == 2)
+                {
+                    money += betmoney;
+                    Console.WriteLine("draw?! OMFG how? so I guess you have {0} monkey-money", money);
+                }
+                if (win == 1)
+                {
+                    money += betmoney * 2;
+                    Console.WriteLine("WOW you won, you lucky bastard. btw you have {0} monkey-money", money);
+                }
+                if (win == 0)
+                    Console.WriteLine("so you lost, like normal, one more to the long list of your losts. btw you have {0} monkey-money", money);
+
+                if (money < 50)
+                {
+                    Console.WriteLine("man you have less than 50 shekels go home, bye bye");
+                    i = 11;
+                }
+
+                if (i < 10)
+                    Console.WriteLine("Do you want to start your {0} round ? y/n", (i + 1));
+                answer = Console.ReadLine();
+                if (answer == "n")
+                    i = 11;
+
+                sumOfCards = 0;
+                sumOfCards2 = 0;
+                Ace = 0;
+                numOfCards = 0;
+            }
+
+            //any end
+            if (money > 1000)
+                Console.WriteLine("so you won!good job...");
+            else
+                Console.WriteLine("so you lost to a computer! lol");
+            Console.WriteLine("dealer: that was a good gam...");
+            Console.ReadLine();
+            Console.WriteLine("dealer's mom: STOP betting with people in my basement!!!");
+            Console.ReadLine();
+            Console.WriteLine("dealer: run!!!");
+            Console.ReadLine();
+        }
+    }
+}
